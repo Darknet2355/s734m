@@ -38,16 +38,25 @@
 
     <ul class="nav-links">
       <li><a href="{% url 'core:home' %}">Home</a></li>
-      <li><a href="{% url 'core:about' %}">About Us</a></li>
       <li><a href="{% url 'programs:program_list' %}">Programs</a></li>
       <li><a href="{% url 'technologies:technology_list' %}">Technologies</a></li>
-      <li><a href="{% url 'institutions:institution_list' %}">Institutions</a></li>
       <li><a href="{% url 'projects:project_list' %}">Projects</a></li>
       <li><a href="{% url 'services:service_list' %}">Services</a></li>
-      <li><a href="{% url 'team:team_list' %}">Team</a></li>
-      <li><a href="{% url 'blog:post_list' %}">Blog</a></li>
-      <li><a href="{% url 'media_gallery:media_list' %}">Media</a></li>
-      <li><a href="{% url 'inquiries:contact' %}">Contact</a></li>
+      <li class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          More <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <ul class="nav-dropdown-menu">
+          <li><a href="{% url 'core:about' %}">About Us</a></li>
+          <li><a href="{% url 'institutions:institution_list' %}">Institutions</a></li>
+          <li><a href="{% url 'team:team_list' %}">Team</a></li>
+          <li><a href="{% url 'blog:post_list' %}">Blog</a></li>
+          <li><a href="{% url 'media_gallery:media_list' %}">Media</a></li>
+          <li><a href="{% url 'inquiries:contact' %}">Contact</a></li>
+          <li class="nav-dropdown-divider"></li>
+          <li><a href="{% url 'accounts:admin_login' %}"><i class="fa-solid fa-lock"></i> Admin Login</a></li>
+        </ul>
+      </li>
     </ul>
 
     <div class="nav-actions">
