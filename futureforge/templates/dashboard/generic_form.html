@@ -1,0 +1,52 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load widget_tweaks %}
+{% block title %}{{ form_title }} — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+  <h2 class="mt-0 mb-0">{{ form_title }}</h2>
+  <a href="{{ cancel_url }}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-arrow-left"></i> Back to List</a>
+</div>
+
+<div class="dash-panel" style="max-width:780px;">
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">
+          {{ field.label }}{% if field.field.required %} <span style="color:#c0392b;">*</span>{% endif %}
+        </label>
+
+        {% if field.field.widget.input_type == 'file' %}
+          {% if field.value %}
+            <img src="{{ field.value.url }}" alt="Current image" style="max-height:110px; border-radius:8px; margin-bottom:8px; display:block; border:1px solid var(--gray-100);">
+          {% endif %}
+          {% with preview_id="dash-image-preview-"|add:field.name %}
+            <img id="{{ preview_id }}" style="max-height:110px; border-radius:8px; margin-bottom:8px; display:none;" alt="New image preview">
+            {% with attr_val="data-preview:"|add:preview_id %}
+              {{ field|add_class:"form-control"|attr:attr_val }}
+            {% endwith %}
+          {% endwith %}
+        {% elif field.field.widget.input_type == 'checkbox' %}
+          <div>{{ field }} </div>
+        {% else %}
+          {{ field|add_class:"form-control" }}
+        {% endif %}
+
+        {% if field.help_text %}<div class="helptext">{{ field.help_text }}</div>{% endif %}
+        {% if field.errors %}<ul class="errorlist">{% for err in field.errors %}<li>{{ err }}</li>{% endfor %}</ul>{% endif %}
+      </div>
+    {% endfor %}
+
+    <div style="display:flex; gap:12px; margin-top:10px;">
+      <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+      <a href="{{ cancel_url }}" class="btn btn-outline-dark">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

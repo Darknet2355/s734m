@@ -1,0 +1,97 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Dashboard — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<h2 class="mt-0">Dashboard Overview</h2>
+<p class="mb-4">A snapshot of everything happening on the FutureForge Labs platform.</p>
+
+<div class="stat-cards">
+  <a href="{% url 'dashboard:program_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+    <div><div class="stat-value">{{ stats.total_programs }}</div><div class="stat-name">Programs</div></div>
+  </a>
+  <a href="{% url 'dashboard:technology_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-microchip"></i></div>
+    <div><div class="stat-value">{{ stats.total_technologies }}</div><div class="stat-name">Technologies</div></div>
+  </a>
+  <a href="{% url 'dashboard:project_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-diagram-project"></i></div>
+    <div><div class="stat-value">{{ stats.total_projects }}</div><div class="stat-name">Projects</div></div>
+  </a>
+  <a href="{% url 'dashboard:institution_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-building-columns"></i></div>
+    <div><div class="stat-value">{{ stats.total_institutions }}</div><div class="stat-name">Institutions</div></div>
+  </a>
+  <a href="{% url 'dashboard:team_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+    <div><div class="stat-value">{{ stats.total_team_members }}</div><div class="stat-name">Team Members</div></div>
+  </a>
+  <a href="{% url 'dashboard:blog_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-newspaper"></i></div>
+    <div><div class="stat-value">{{ stats.published_posts }}</div><div class="stat-name">Published Posts</div></div>
+  </a>
+  <a href="{% url 'dashboard:message_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-envelope"></i></div>
+    <div><div class="stat-value">{{ stats.unread_messages }}</div><div class="stat-name">Unread Messages</div></div>
+  </a>
+  <a href="{% url 'dashboard:training_request_list' %}" class="stat-card" style="text-decoration:none;">
+    <div class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+    <div><div class="stat-value">{{ stats.pending_requests }}</div><div class="stat-name">Pending Requests</div></div>
+  </a>
+</div>
+
+<div class="grid grid-2" style="gap:24px;">
+  <div class="dash-panel">
+    <h3>Recent Messages <a href="{% url 'dashboard:message_list' %}" class="btn btn-outline-dark btn-sm">View All</a></h3>
+    {% if recent_messages %}
+    <table class="dash-table">
+      <thead><tr><th>Name</th><th>Subject</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for msg in recent_messages %}
+        <tr>
+          <td>{{ msg.full_name }}</td>
+          <td>{{ msg.subject|truncatechars:30 }}</td>
+          <td>{{ msg.created_at|date:"M d" }}</td>
+          <td>{% if msg.is_read %}<span class="badge badge-green">Read</span>{% else %}<span class="badge badge-orange">Unread</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p>No messages yet.</p>{% endif %}
+  </div>
+
+  <div class="dash-panel">
+    <h3>Recent Training Requests <a href="{% url 'dashboard:training_request_list' %}" class="btn btn-outline-dark btn-sm">View All</a></h3>
+    {% if recent_requests %}
+    <table class="dash-table">
+      <thead><tr><th>Requester</th><th>Organization</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for req in recent_requests %}
+        <tr>
+          <td>{{ req.full_name }}</td>
+          <td>{{ req.organization|truncatechars:22 }}</td>
+          <td>{{ req.created_at|date:"M d" }}</td>
+          <td><span class="badge badge-blue">{{ req.get_status_display }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p>No training requests yet.</p>{% endif %}
+  </div>
+</div>
+
+<div class="dash-panel mt-4">
+  <h3>Quick Actions</h3>
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <a href="{% url 'dashboard:program_add' %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-plus"></i> Add Program</a>
+    <a href="{% url 'dashboard:technology_add' %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-plus"></i> Add Technology</a>
+    <a href="{% url 'dashboard:project_add' %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-plus"></i> Add Project</a>
+    <a href="{% url 'dashboard:blog_add' %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-plus"></i> Write Blog Post</a>
+    <a href="{% url 'dashboard:team_add' %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-plus"></i> Add Team Member</a>
+  </div>
+  <p style="margin-top:16px; margin-bottom:0; color:var(--gray-500); font-size:0.85rem;">
+    Every content type above has full Create / Edit / Delete tooling in this dashboard. For bulk edits,
+    inline image galleries, or advanced field management, <a href="/django-admin/">Django Admin</a> is also available.
+  </p>
+</div>
+{% endblock %}

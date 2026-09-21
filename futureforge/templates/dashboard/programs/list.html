@@ -1,0 +1,45 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Manage Programs — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+  <h2 class="mt-0 mb-0">Programs</h2>
+  <a href="{% url 'dashboard:program_add' %}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Program</a>
+</div>
+
+<form method="get" style="display:flex; gap:10px; margin-bottom:18px; max-width:420px;">
+  <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search programs..." class="form-control">
+  <button type="submit" class="btn btn-outline-dark">Search</button>
+</form>
+
+{% if programs %}
+<div style="overflow-x:auto;">
+<table class="dash-table">
+  <thead><tr><th>Title</th><th>Category</th><th>Level</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for program in programs %}
+    <tr>
+      <td>{{ program.title }}</td>
+      <td>{{ program.category.name }}</td>
+      <td>{{ program.get_difficulty_level_display }}</td>
+      <td>
+        {% if program.status == 'active' %}<span class="badge badge-green">Active</span>
+        {% elif program.status == 'coming_soon' %}<span class="badge badge-yellow">Coming Soon</span>
+        {% else %}<span class="badge badge-gray">Archived</span>{% endif %}
+      </td>
+      <td>{% if program.is_featured %}<i class="fa-solid fa-star" style="color:var(--orange);"></i>{% else %}—{% endif %}</td>
+      <td>
+        <a href="{{ program.get_absolute_url }}" target="_blank" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-eye"></i></a>
+        <a href="{% url 'dashboard:program_edit' program.pk %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-pen"></i></a>
+        <a href="{% url 'dashboard:program_delete' program.pk %}" class="btn btn-sm" style="background:#fdeaea;color:#c0392b;"><i class="fa-solid fa-trash"></i></a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty-state"><p>No programs yet. <a href="{% url 'dashboard:program_add' %}">Add your first program</a>.</p></div>
+{% endif %}
+{% endblock %}

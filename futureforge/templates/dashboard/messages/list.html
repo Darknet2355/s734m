@@ -1,0 +1,52 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Messages — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<h2 class="mt-0 mb-2">Contact Messages</h2>
+
+<div class="filter-bar">
+  <a href="{% url 'dashboard:message_list' %}" class="{% if not active_status %}active{% endif %}">All</a>
+  <a href="?status=unread" class="{% if active_status == 'unread' %}active{% endif %}">Unread</a>
+  <a href="?status=read" class="{% if active_status == 'read' %}active{% endif %}">Read</a>
+</div>
+
+<form method="get" style="display:flex; gap:10px; margin-bottom:18px; max-width:420px;">
+  {% if active_status %}<input type="hidden" name="status" value="{{ active_status }}">{% endif %}
+  <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search messages..." class="form-control">
+  <button type="submit" class="btn btn-outline-dark">Search</button>
+</form>
+
+{% if page_obj %}
+<div style="overflow-x:auto;">
+<table class="dash-table">
+  <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for msg in page_obj %}
+    <tr>
+      <td>{{ msg.full_name }}</td>
+      <td>{{ msg.email }}</td>
+      <td>{{ msg.subject|truncatechars:40 }}</td>
+      <td>{{ msg.created_at|date:"M d, Y H:i" }}</td>
+      <td>{% if msg.is_read %}<span class="badge badge-green">Read</span>{% else %}<span class="badge badge-orange">Unread</span>{% endif %}</td>
+      <td>
+        <form method="post" action="{% url 'dashboard:message_toggle_read' msg.pk %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-dark btn-sm" title="Toggle read status">
+            <i class="fa-solid {% if msg.is_read %}fa-envelope{% else %}fa-envelope-open{% endif %}"></i>
+          </button>
+        </form>
+        <a href="{% url 'dashboard:message_delete' msg.pk %}" class="btn btn-sm" style="background:#fdeaea;color:#c0392b;"><i class="fa-solid fa-trash"></i></a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="6" style="background:var(--off-white); font-size:0.85rem; color:var(--gray-700);">{{ msg.message }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty-state"><p>No messages yet.</p></div>
+{% endif %}
+{% endblock %}

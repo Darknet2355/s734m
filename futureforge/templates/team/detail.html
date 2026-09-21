@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ member.full_name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'team:team_list' %}">Team</a> / {{ member.full_name }}</div>
+    <h1>{{ member.full_name }}</h1>
+    <p style="color:var(--cyan); font-weight:700;">{{ member.position }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:flex-start; gap:40px;">
+    <div>
+      <div class="card-img" style="height:360px; border-radius:var(--radius); box-shadow:var(--shadow-md);">
+        {% if member.photo %}<img src="{{ member.photo.url }}" alt="{{ member.full_name }}">
+        {% else %}<img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80" alt="{{ member.full_name }}">{% endif %}
+      </div>
+      {% if member.social_links.all %}
+      <div class="social-row" style="margin-top:18px;">
+        {% for link in member.social_links.all %}
+        <a href="{{ link.url }}" target="_blank" style="background:var(--gray-100); color:var(--navy);" aria-label="{{ link.get_platform_display }}">
+          {% if link.platform == 'facebook' %}<i class="fa-brands fa-facebook-f"></i>
+          {% elif link.platform == 'instagram' %}<i class="fa-brands fa-instagram"></i>
+          {% elif link.platform == 'linkedin' %}<i class="fa-brands fa-linkedin-in"></i>
+          {% elif link.platform == 'twitter' %}<i class="fa-brands fa-x-twitter"></i>
+          {% elif link.platform == 'youtube' %}<i class="fa-brands fa-youtube"></i>
+          {% elif link.platform == 'tiktok' %}<i class="fa-brands fa-tiktok"></i>
+          {% else %}<i class="fa-solid fa-globe"></i>{% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    <div>
+      <h2>Biography</h2>
+      <p>{{ member.full_bio|linebreaks }}</p>
+      <h2>Areas of Expertise</h2>
+      <div class="card-meta">
+        {% for area in member.expertise_list %}<span class="badge badge-blue">{{ area }}</span>{% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Request Training — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Request Training</h1>
+    <p>Tell us about your school, institution or organization and we'll design a program for you.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="max-width:760px;">
+    <div class="card" style="padding:32px;">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="grid grid-2" style="gap:16px;">
+          <div class="form-group">
+            <label for="{{ form.full_name.id_for_label }}">Full Name</label>
+            {{ form.full_name|add_class:"form-control" }}
+            {{ form.full_name.errors }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.organization.id_for_label }}">Organization / Institution</label>
+            {{ form.organization|add_class:"form-control" }}
+            {{ form.organization.errors }}
+          </div>
+        </div>
+        <div class="grid grid-2" style="gap:16px;">
+          <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email|add_class:"form-control" }}
+            {{ form.email.errors }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.phone_number.id_for_label }}">Phone Number</label>
+            {{ form.phone_number|add_class:"form-control" }}
+            {{ form.phone_number.errors }}
+          </div>
+        </div>
+        <div class="grid grid-2" style="gap:16px;">
+          <div class="form-group">
+            <label for="{{ form.location.id_for_label }}">Location</label>
+            {{ form.location|add_class:"form-control" }}
+            {{ form.location.errors }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.service.id_for_label }}">Service Required</label>
+            {{ form.service|add_class:"form-control" }}
+            {{ form.service.errors }}
+          </div>
+        </div>
+        <div class="grid grid-2" style="gap:16px;">
+          <div class="form-group">
+            <label for="{{ form.training_level.id_for_label }}">Training Level</label>
+            {{ form.training_level|add_class:"form-control" }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.number_of_participants.id_for_label }}">Number of Participants</label>
+            {{ form.number_of_participants|add_class:"form-control" }}
+            {{ form.number_of_participants.errors }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="{{ form.preferred_date.id_for_label }}">Preferred Date</label>
+          {{ form.preferred_date|add_class:"form-control" }}
+          {{ form.preferred_date.errors }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.message.id_for_label }}">Message (optional)</label>
+          {{ form.message|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

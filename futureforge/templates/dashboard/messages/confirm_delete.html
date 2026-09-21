@@ -1,0 +1,16 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Delete Message — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<div class="dash-panel" style="max-width:520px;">
+  <h3 style="color:#c0392b;"><i class="fa-solid fa-triangle-exclamation"></i> Confirm Deletion</h3>
+  <p>Are you sure you want to delete the message from <strong>{{ msg.full_name }}</strong> ("{{ msg.subject }}")?</p>
+  <form method="post">
+    {% csrf_token %}
+    <div style="display:flex; gap:12px; margin-top:16px;">
+      <button type="submit" class="btn" style="background:#c0392b; color:white;"><i class="fa-solid fa-trash"></i> Yes, Delete</button>
+      <a href="{% url 'dashboard:message_list' %}" class="btn btn-outline-dark">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

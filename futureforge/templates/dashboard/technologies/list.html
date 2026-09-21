@@ -1,0 +1,40 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Manage Technologies — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+  <h2 class="mt-0 mb-0">Technologies</h2>
+  <a href="{% url 'dashboard:technology_add' %}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Technology</a>
+</div>
+
+<form method="get" style="display:flex; gap:10px; margin-bottom:18px; max-width:420px;">
+  <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search technologies..." class="form-control">
+  <button type="submit" class="btn btn-outline-dark">Search</button>
+</form>
+
+{% if technologies %}
+<div style="overflow-x:auto;">
+<table class="dash-table">
+  <thead><tr><th>Name</th><th>Category</th><th>Difficulty</th><th>Featured</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for tech in technologies %}
+    <tr>
+      <td>{{ tech.name }}</td>
+      <td>{{ tech.category.name }}</td>
+      <td><span class="badge badge-blue">{{ tech.get_difficulty_display }}</span></td>
+      <td>{% if tech.is_featured %}<i class="fa-solid fa-star" style="color:var(--orange);"></i>{% else %}—{% endif %}</td>
+      <td>
+        <a href="{{ tech.get_absolute_url }}" target="_blank" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-eye"></i></a>
+        <a href="{% url 'dashboard:technology_edit' tech.pk %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-pen"></i></a>
+        <a href="{% url 'dashboard:technology_delete' tech.pk %}" class="btn btn-sm" style="background:#fdeaea;color:#c0392b;"><i class="fa-solid fa-trash"></i></a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty-state"><p>No technologies yet. <a href="{% url 'dashboard:technology_add' %}">Add your first technology</a>.</p></div>
+{% endif %}
+{% endblock %}

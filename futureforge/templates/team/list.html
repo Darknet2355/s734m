@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Meet Our Team — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Meet Our Team</h1>
+    <p>Engineers, trainers and educators behind FutureForge Labs.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if members %}
+    <div class="grid grid-4">
+      {% for member in members %}
+      <div class="card">
+        <div class="card-img" style="height:220px;">
+          {% if member.photo %}<img src="{{ member.photo.url }}" alt="{{ member.full_name }}">
+          {% else %}<img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80" alt="{{ member.full_name }}">{% endif %}
+        </div>
+        <div class="card-body">
+          <h3 style="margin-bottom:2px;">{{ member.full_name }}</h3>
+          <p style="color:var(--electric-blue); font-weight:700; font-size:0.85rem;">{{ member.position }}</p>
+          <p>{{ member.short_bio }}</p>
+          <a href="{{ member.get_absolute_url }}" class="btn btn-outline-dark btn-sm">Read More</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><p>Team profiles coming soon.</p></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

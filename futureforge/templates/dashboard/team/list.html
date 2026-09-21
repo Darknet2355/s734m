@@ -1,0 +1,40 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Manage Team — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+  <h2 class="mt-0 mb-0">Team Members</h2>
+  <a href="{% url 'dashboard:team_add' %}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Team Member</a>
+</div>
+
+<form method="get" style="display:flex; gap:10px; margin-bottom:18px; max-width:420px;">
+  <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search team members..." class="form-control">
+  <button type="submit" class="btn btn-outline-dark">Search</button>
+</form>
+
+{% if members %}
+<div style="overflow-x:auto;">
+<table class="dash-table">
+  <thead><tr><th>Name</th><th>Position</th><th>Order</th><th>Active</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for member in members %}
+    <tr>
+      <td>{{ member.full_name }}</td>
+      <td>{{ member.position }}</td>
+      <td>{{ member.order }}</td>
+      <td>{% if member.is_active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge badge-gray">Hidden</span>{% endif %}</td>
+      <td>
+        <a href="{{ member.get_absolute_url }}" target="_blank" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-eye"></i></a>
+        <a href="{% url 'dashboard:team_edit' member.pk %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-pen"></i></a>
+        <a href="{% url 'dashboard:team_delete' member.pk %}" class="btn btn-sm" style="background:#fdeaea;color:#c0392b;"><i class="fa-solid fa-trash"></i></a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty-state"><p>No team members yet. <a href="{% url 'dashboard:team_add' %}">Add your first team member</a>.</p></div>
+{% endif %}
+{% endblock %}

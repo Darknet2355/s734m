@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found — FutureForge Labs</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<section style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--navy); color:white; text-align:center; padding:20px;">
+  <div>
+    <div style="font-size:5rem; font-weight:800; color:var(--cyan);">404</div>
+    <h1 style="color:white;">Page Not Found</h1>
+    <p style="color:var(--gray-300); max-width:420px; margin:0 auto 26px;">The page you're looking for doesn't exist or may have been moved.</p>
+    <a href="/" class="btn btn-primary">Back to Home</a>
+  </div>
+</section>
+</body>
+</html>

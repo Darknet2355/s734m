@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Dashboard — {{ SITE_NAME }}{% endblock %}</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% block extra_css %}{% endblock %}
+</head>
+<body class="dashboard-body">
+
+<div class="dash-layout">
+  <aside class="dash-sidebar">
+    <div class="dash-brand">
+      <span class="logo-mark"><i class="fa-solid fa-bolt"></i></span>
+      <div><strong>FutureForge</strong><br><small>Admin Dashboard</small></div>
+    </div>
+    <nav class="dash-nav">
+      <a href="{% url 'dashboard:index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+      <a href="{% url 'dashboard:program_list' %}" class="{% if 'program' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-graduation-cap"></i> Programs</a>
+      <a href="{% url 'dashboard:technology_list' %}" class="{% if 'technology' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-microchip"></i> Technologies</a>
+      <a href="{% url 'dashboard:institution_list' %}" class="{% if 'institution' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-building-columns"></i> Institutions</a>
+      <a href="{% url 'dashboard:project_list' %}" class="{% if 'project' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+      <a href="{% url 'dashboard:service_list' %}" class="{% if 'service' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-briefcase"></i> Services</a>
+      <a href="{% url 'dashboard:team_list' %}" class="{% if 'team' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-users"></i> Team</a>
+      <a href="{% url 'dashboard:blog_list' %}" class="{% if 'blog' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-newspaper"></i> Blog</a>
+      <a href="{% url 'dashboard:media_list' %}" class="{% if 'media' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-photo-film"></i> Media</a>
+      <a href="{% url 'dashboard:message_list' %}" class="{% if 'message' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-envelope"></i> Messages</a>
+      <a href="{% url 'dashboard:training_request_list' %}" class="{% if 'training_request' in request.resolver_match.url_name %}active{% endif %}"><i class="fa-solid fa-clipboard-list"></i> Training Requests</a>
+      <a href="/django-admin/"><i class="fa-solid fa-gear"></i> Full Admin / Settings</a>
+    </nav>
+    <a href="{% url 'accounts:admin_logout' %}" class="dash-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div>Welcome, <strong>{{ request.user.get_full_name|default:request.user.username }}</strong></div>
+      <form method="get" action="{% url 'dashboard:global_search' %}" style="display:flex; gap:8px; flex:1; max-width:360px; margin:0 24px;">
+        <input type="text" name="q" placeholder="Search everything..." class="form-control" style="padding:8px 14px;">
+      </form>
+      <a href="{% url 'core:home' %}" target="_blank" class="btn btn-outline-dark btn-sm">View Site</a>
+    </header>
+    <div class="dash-content">
+      {% if messages %}
+        {% for message in messages %}<div class="alert alert-{{ message.tags }}">{{ message }}</div>{% endfor %}
+      {% endif %}
+      {% block dash_content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

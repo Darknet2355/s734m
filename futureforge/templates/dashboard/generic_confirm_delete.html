@@ -1,0 +1,19 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Delete {{ model_label }} — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<div class="dash-panel" style="max-width:520px;">
+  <h3 style="color:#c0392b;"><i class="fa-solid fa-triangle-exclamation"></i> Confirm Deletion</h3>
+  <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+  <p style="color:var(--gray-500); font-size:0.85rem;">This {{ model_label|lower }} will be permanently removed from FutureForge Labs, including from the public website. This action cannot be undone.</p>
+  <form method="post">
+    {% csrf_token %}
+    <div style="display:flex; gap:12px; margin-top:16px;">
+      <button type="submit" class="btn" style="background:#c0392b; color:white;">
+        <i class="fa-solid fa-trash"></i> Yes, Delete
+      </button>
+      <a href="{{ cancel_url }}" class="btn btn-outline-dark">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

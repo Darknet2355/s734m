@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Blog & News — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Blog & News</h1>
+    <p>Stories, updates and insights from the world of STEAM, robotics and AI education.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form method="get" style="max-width:460px; display:flex; gap:10px; margin-bottom:26px;">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search blog posts..." class="form-control">
+      {% if active_category %}<input type="hidden" name="category" value="{{ active_category }}">{% endif %}
+      <button type="submit" class="btn btn-accent">Search</button>
+    </form>
+
+    <div class="filter-bar">
+      <a href="{% url 'blog:post_list' %}{% if query %}?q={{ query }}{% endif %}" class="{% if not active_category %}active{% endif %}">All Categories</a>
+      {% for cat in categories %}
+        <a href="?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}" class="{% if active_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+
+    {% if page_obj %}
+    <div class="grid grid-3">
+      {% for post in page_obj %}
+      <div class="card">
+        <div class="card-img">
+          {% if post.featured_image %}<img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+          {% else %}<img src="https://images.unsplash.com/photo-1550439062-609e1531270e?w=600&q=80" alt="{{ post.title }}">{% endif %}
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            {% if post.category %}<span class="badge badge-blue">{{ post.category.name }}</span>{% endif %}
+            <span class="badge badge-gray">{{ post.published_at|date:"M d, Y" }}</span>
+          </div>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.excerpt }}</p>
+          <a href="{{ post.get_absolute_url }}" class="btn btn-outline-dark btn-sm">Read More</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?{% if query %}q={{ query }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.previous_page_number }}">&laquo; Prev</a>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}<span class="current">{{ num }}</span>
+        {% else %}<a href="?{% if query %}q={{ query }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ num }}">{{ num }}</a>{% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="?{% if query %}q={{ query }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.next_page_number }}">Next &raquo;</a>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state"><p>No blog posts found.</p></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

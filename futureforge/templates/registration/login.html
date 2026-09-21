@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Admin Login — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height:70vh; display:flex; align-items:center; background:var(--gray-100);">
+  <div class="container" style="max-width:440px;">
+    <div class="card" style="padding:36px;">
+      <div class="text-center mb-4">
+        <div class="logo-mark" style="margin:0 auto 14px; width:56px; height:56px; font-size:1.4rem;"><i class="fa-solid fa-bolt"></i></div>
+        <h2 style="margin-bottom:4px;">Admin Dashboard Login</h2>
+        <p style="margin:0;">Restricted access — FutureForge Labs staff only</p>
+      </div>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="{{ form.username.id_for_label }}">Username</label>
+          {{ form.username|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+          {{ form.password|add_class:"form-control" }}
+        </div>
+        {% if form.non_field_errors %}
+          <div class="alert alert-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

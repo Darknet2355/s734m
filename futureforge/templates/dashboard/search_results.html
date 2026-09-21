@@ -1,0 +1,33 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Search — {{ SITE_NAME }} Dashboard{% endblock %}
+
+{% block dash_content %}
+<h2 class="mt-0 mb-2">Search Everything</h2>
+<form method="get" style="display:flex; gap:10px; max-width:460px; margin-bottom:26px;">
+  <input type="text" name="q" value="{{ query }}" placeholder="Search programs, projects, messages, requests..." class="form-control">
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+{% if query %}
+  <p class="mb-4">{{ total_results }} result{{ total_results|pluralize }} for "<strong>{{ query }}</strong>"</p>
+  {% for section, items in results.items %}
+    {% if items %}
+    <div class="dash-panel">
+      <h3>{{ section }}</h3>
+      <table class="dash-table">
+        <tbody>
+          {% for label, url in items %}
+          <tr><td>{{ label }}</td><td style="text-align:right;"><a href="{{ url }}" class="btn btn-outline-dark btn-sm">Open</a></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  {% endfor %}
+  {% if total_results == 0 %}
+    <div class="empty-state"><p>No matches found for "{{ query }}".</p></div>
+  {% endif %}
+{% else %}
+  <p>Search across programs, technologies, institutions, projects, services, team members, blog posts, media, messages and training requests all at once.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Projects — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Innovation Projects</h1>
+    <p>Real, working builds created by our learners — from robots to smart systems.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="filter-bar">
+      <a href="{% url 'projects:project_list' %}" class="{% if not active_category %}active{% endif %}">All Categories</a>
+      {% for value, label in category_choices %}
+        <a href="?category={{ value }}" class="{% if active_category == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+    <div class="filter-bar">
+      <a href="?{% if active_category %}category={{ active_category }}&{% endif %}" class="{% if not active_audience %}active{% endif %}">All Audiences</a>
+      {% for value, label in audience_choices %}
+        <a href="?{% if active_category %}category={{ active_category }}&{% endif %}audience={{ value }}" class="{% if active_audience == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    {% if page_obj %}
+    <div class="grid grid-3">
+      {% for project in page_obj %}
+      <div class="card">
+        <div class="card-img"><img src="{{ project.featured_image.url }}" alt="{{ project.title }}"></div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="badge badge-cyan">{{ project.get_category_display }}</span>
+            <span class="badge badge-gray">{{ project.get_target_audience_display }}</span>
+          </div>
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description|truncatewords:16 }}</p>
+          <a href="{{ project.get_absolute_url }}" class="btn btn-outline-dark btn-sm">View Project</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <div class="empty-state"><p>No projects found for this filter yet.</p></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ institution.name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'institutions:institution_list' %}">Institutions</a> / {{ institution.name }}</div>
+    <h1>{{ institution.name }}</h1>
+    <span class="badge badge-cyan">{{ institution.get_type_display }}</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:flex-start; gap:40px;">
+    <div>
+      <h2>About</h2>
+      <p>{{ institution.description|linebreaks }}</p>
+      {% if institution.partnership_info %}
+      <h2>Partnership Information</h2>
+      <p>{{ institution.partnership_info|linebreaks }}</p>
+      {% endif %}
+      {% if institution.programs_conducted.all %}
+      <h2>Programs Conducted</h2>
+      <ul>{% for p in institution.programs_conducted.all %}<li><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></li>{% endfor %}</ul>
+      {% endif %}
+    </div>
+    <div>
+      <div class="card" style="padding:26px; text-align:center;">
+        {% if institution.logo %}<img src="{{ institution.logo.url }}" alt="{{ institution.name }}" style="max-height:120px; margin:0 auto 16px;">{% endif %}
+        <p><i class="fa-solid fa-location-dot"></i> {{ institution.location }}</p>
+        <a href="{% url 'inquiries:contact' %}" class="btn btn-primary btn-block">Partner With Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

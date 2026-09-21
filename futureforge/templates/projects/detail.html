@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ project.title }} — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ project.description|truncatewords:25 }}{% endblock %}
+{% block og_title %}{{ project.title }}{% endblock %}
+{% block og_description %}{{ project.description|truncatewords:25 }}{% endblock %}
+{% block og_image %}{{ SITE_DOMAIN }}{{ project.featured_image.url }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'projects:project_list' %}">Projects</a> / {{ project.title }}</div>
+    <h1>{{ project.title }}</h1>
+    <div class="card-meta">
+      <span class="badge badge-cyan">{{ project.get_category_display }}</span>
+      <span class="badge badge-gray">{{ project.get_target_audience_display }}</span>
+      <span class="badge badge-blue">{{ project.project_date|date:"M Y" }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:flex-start; gap:40px;">
+    <div>
+      <img src="{{ project.featured_image.url }}" alt="{{ project.title }}" style="border-radius:var(--radius); box-shadow:var(--shadow-md); margin-bottom:24px;">
+      <h2>About This Project</h2>
+      <p>{{ project.description|linebreaks }}</p>
+
+      {% if project.video_url %}
+      <h2>Project Demonstration</h2>
+      <div style="position:relative; padding-bottom:56.25%; height:0; border-radius:var(--radius); overflow:hidden; margin-bottom:24px;">
+        <iframe src="{{ project.video_url }}" title="{{ project.title }} video" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen loading="lazy"></iframe>
+      </div>
+      {% endif %}
+
+      {% if project.gallery_images.all %}
+      <h2>Project Gallery</h2>
+      <div class="grid grid-3">
+        {% for img in project.gallery_images.all %}
+        <div class="card-img" style="height:150px; border-radius:var(--radius-sm);"><img src="{{ img.image.url }}" alt="{{ img.caption|default:project.title }}"></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    <div>
+      <div class="card" style="padding:26px;">
+        <h3>Technologies Used</h3>
+        <div class="card-meta">
+          {% for tech in project.technologies.all %}<a href="{{ tech.get_absolute_url }}" class="badge badge-blue">{{ tech.name }}</a>{% endfor %}
+        </div>
+        <a href="{% url 'inquiries:training_request' %}" class="btn btn-primary btn-block mt-2">Request Similar Training</a>
+      </div>
+
+      {% if related_projects %}
+      <div class="card" style="padding:26px; margin-top:20px;">
+        <h3>Related Projects</h3>
+        {% for rp in related_projects %}<p><a href="{{ rp.get_absolute_url }}">{{ rp.title }}</a></p>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

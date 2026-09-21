@@ -1,0 +1,47 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}Manage Blog — {{ SITE_NAME }}{% endblock %}
+
+{% block dash_content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+  <h2 class="mt-0 mb-0">Blog Posts</h2>
+  <a href="{% url 'dashboard:blog_add' %}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Blog Post</a>
+</div>
+
+<form method="get" style="display:flex; gap:10px; margin-bottom:18px; max-width:420px;">
+  <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search posts..." class="form-control">
+  <button type="submit" class="btn btn-outline-dark">Search</button>
+</form>
+
+{% if posts %}
+<div style="overflow-x:auto;">
+<table class="dash-table">
+  <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Status</th><th>Published</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for post in posts %}
+    <tr>
+      <td>{{ post.title }}</td>
+      <td>{{ post.category.name|default:"—" }}</td>
+      <td>{{ post.author.username|default:"—" }}</td>
+      <td>{% if post.status == 'published' %}<span class="badge badge-green">Published</span>{% else %}<span class="badge badge-yellow">Draft</span>{% endif %}</td>
+      <td>{{ post.published_at|date:"M d, Y"|default:"—" }}</td>
+      <td>
+        <a href="{{ post.get_absolute_url }}" target="_blank" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-eye"></i></a>
+        <a href="{% url 'dashboard:blog_edit' post.pk %}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-pen"></i></a>
+        <form method="post" action="{% url 'dashboard:blog_toggle_publish' post.pk %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-dark btn-sm" title="Toggle publish status">
+            <i class="fa-solid {% if post.status == 'published' %}fa-eye-slash{% else %}fa-upload{% endif %}"></i>
+          </button>
+        </form>
+        <a href="{% url 'dashboard:blog_delete' post.pk %}" class="btn btn-sm" style="background:#fdeaea;color:#c0392b;"><i class="fa-solid fa-trash"></i></a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "partials/pagination.html" %}
+{% else %}
+<div class="empty-state"><p>No blog posts yet. <a href="{% url 'dashboard:blog_add' %}">Write your first post</a>.</p></div>
+{% endif %}
+{% endblock %}

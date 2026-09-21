@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ technology.name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'technologies:technology_list' %}">Technologies</a> / {{ technology.name }}</div>
+    <h1>{{ technology.name }}</h1>
+    <div class="card-meta">
+      <span class="badge badge-cyan">{{ technology.category.name }}</span>
+      <span class="badge badge-gray">{{ technology.get_difficulty_display }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:flex-start; gap:40px;">
+    <div>
+      <img src="{% if technology.image %}{{ technology.image.url }}{% else %}https://images.unsplash.com/photo-1553406830-ef2513450d76?w=900&q=80{% endif %}" alt="{{ technology.name }}" style="border-radius:var(--radius); box-shadow:var(--shadow-md); margin-bottom:24px;">
+      <h2>Description</h2>
+      <p>{{ technology.description|linebreaks }}</p>
+      {% if technology.training_level %}<p><strong>Training Level:</strong> {{ technology.training_level }}</p>{% endif %}
+    </div>
+    <div>
+      <div class="card" style="padding:26px;">
+        <h3>Applications</h3>
+        <div class="card-meta">
+          {% for app in technology.applications_list %}<span class="badge badge-blue">{{ app }}</span>{% endfor %}
+        </div>
+      </div>
+
+      {% if related_projects %}
+      <div class="card" style="padding:26px; margin-top:20px;">
+        <h3>Projects Using This Technology</h3>
+        {% for p in related_projects %}<p><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></p>{% endfor %}
+      </div>
+      {% endif %}
+
+      {% if related_technologies %}
+      <div class="card" style="padding:26px; margin-top:20px;">
+        <h3>Related Technologies</h3>
+        {% for t in related_technologies %}<p><a href="{{ t.get_absolute_url }}">{{ t.name }}</a></p>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

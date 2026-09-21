@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Institutions We Work With — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Institutions We Work With</h1>
+    <p>Trusted by schools, universities, companies, NGOs and innovation hubs.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="filter-bar">
+      <a href="{% url 'institutions:institution_list' %}" class="{% if not active_type %}active{% endif %}">All Types</a>
+      {% for value, label in type_choices %}
+        <a href="?type={{ value }}" class="{% if active_type == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    {% if page_obj %}
+    <div class="grid grid-3">
+      {% for inst in page_obj %}
+      <div class="card">
+        <div class="card-img" style="height:150px; background:var(--white); display:flex; align-items:center; justify-content:center;">
+          {% if inst.logo %}<img src="{{ inst.logo.url }}" alt="{{ inst.name }}" style="max-height:120px; width:auto; object-fit:contain;">
+          {% else %}<i class="fa-solid fa-building-columns" style="font-size:2.4rem; color:var(--gray-300);"></i>{% endif %}
+        </div>
+        <div class="card-body">
+          <span class="badge badge-blue">{{ inst.get_type_display }}</span>
+          <h3>{{ inst.name }}</h3>
+          <p><i class="fa-solid fa-location-dot"></i> {{ inst.location }}</p>
+          <a href="{% url 'institutions:institution_detail' inst.slug %}" class="btn btn-outline-dark btn-sm">View Details</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <div class="empty-state"><p>No institutions listed yet.</p></div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{% url 'inquiries:contact' %}" class="btn btn-primary">Partner With Us</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

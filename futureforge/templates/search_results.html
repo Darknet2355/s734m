@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Search — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Search FutureForge Labs</h1>
+    <form method="get" style="max-width:560px; display:flex; gap:10px; margin-top:20px;">
+      {{ form.q|add_class:"form-control" }}
+      <button type="submit" class="btn btn-accent">Search</button>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if query %}
+      <p class="mb-4">{{ total_results }} result{{ total_results|pluralize }} for "<strong>{{ query }}</strong>"</p>
+
+      {% if results.programs %}
+        <h3>Programs</h3>
+        <ul class="mb-4">
+          {% for p in results.programs %}<li><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></li>{% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if results.technologies %}
+        <h3>Technologies</h3>
+        <ul class="mb-4">
+          {% for t in results.technologies %}<li><a href="{{ t.get_absolute_url }}">{{ t.name }}</a></li>{% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if results.projects %}
+        <h3>Projects</h3>
+        <ul class="mb-4">
+          {% for pr in results.projects %}<li><a href="{{ pr.get_absolute_url }}">{{ pr.title }}</a></li>{% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if results.services %}
+        <h3>Services</h3>
+        <ul class="mb-4">
+          {% for s in results.services %}<li><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></li>{% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if results.posts %}
+        <h3>Blog Posts</h3>
+        <ul class="mb-4">
+          {% for post in results.posts %}<li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>{% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if total_results == 0 %}
+        <div class="empty-state">
+          <i class="fa-solid fa-magnifying-glass" style="font-size:2rem; margin-bottom:12px;"></i>
+          <p>No results found for "{{ query }}". Try a different keyword.</p>
+        </div>
+      {% endif %}
+    {% else %}
+      <p>Enter a keyword above to search programs, technologies, projects, services and blog posts.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

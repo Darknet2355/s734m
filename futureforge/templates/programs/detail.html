@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ program.title }} — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{{ program.description|truncatewords:25 }}{% endblock %}
+{% block og_title %}{{ program.title }}{% endblock %}
+{% block og_image %}{% if program.image %}{{ SITE_DOMAIN }}{{ program.image.url }}{% else %}{{ SITE_DOMAIN }}{% static 'images/og-default.png' %}{% endif %}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'programs:program_list' %}">Programs</a> / {{ program.title }}</div>
+    <h1>{{ program.title }}</h1>
+    <div class="card-meta">
+      <span class="badge badge-cyan">{{ program.category.name }}</span>
+      <span class="badge badge-gray">{{ program.get_difficulty_level_display }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:flex-start; gap:40px;">
+    <div>
+      <img src="{% if program.image %}{{ program.image.url }}{% else %}https://images.unsplash.com/photo-1516110833967-0b5716ca1387?w=900&q=80{% endif %}" alt="{{ program.title }}" style="border-radius:var(--radius); box-shadow:var(--shadow-md); margin-bottom:24px;">
+      <h2>Overview</h2>
+      <p>{{ program.description|linebreaks }}</p>
+      <h2>Skills Acquired</h2>
+      <ul>
+        {% for skill in program.skills_list %}<li>{{ skill }}</li>{% endfor %}
+      </ul>
+    </div>
+    <div>
+      <div class="card" style="padding:26px;">
+        <h3>Program Details</h3>
+        <p><strong>Target Audience:</strong> {{ program.target_audience }}</p>
+        <p><strong>Duration:</strong> {{ program.duration }}</p>
+        <p><strong>Difficulty:</strong> {{ program.get_difficulty_level_display }}</p>
+        <a href="{% url 'inquiries:training_request' %}" class="btn btn-primary btn-block">Request This Training</a>
+      </div>
+
+      {% if related_programs %}
+      <div class="card" style="padding:26px; margin-top:20px;">
+        <h3>Related Programs</h3>
+        {% for rp in related_programs %}
+          <p><a href="{{ rp.get_absolute_url }}">{{ rp.title }}</a></p>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

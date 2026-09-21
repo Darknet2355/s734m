@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Programs — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Our Training Programs</h1>
+    <p>From primary school introductions to advanced university and professional tracks.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="filter-bar">
+      <a href="{% url 'programs:program_list' %}" class="{% if not active_category %}active{% endif %}">All Categories</a>
+      {% for cat in categories %}
+        <a href="?category={{ cat.slug }}" class="{% if active_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+    <div class="filter-bar">
+      <a href="?{% if active_category %}category={{ active_category }}&{% endif %}" class="{% if not active_level %}active{% endif %}">All Levels</a>
+      {% for value, label in difficulty_choices %}
+        <a href="?{% if active_category %}category={{ active_category }}&{% endif %}level={{ value }}" class="{% if active_level == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    {% if page_obj %}
+    <div class="grid grid-3">
+      {% for program in page_obj %}
+      <div class="card">
+        <div class="card-img">
+          {% if program.image %}<img src="{{ program.image.url }}" alt="{{ program.title }}">
+          {% else %}<img src="https://images.unsplash.com/photo-1516110833967-0b5716ca1387?w=600&q=80" alt="{{ program.title }}">{% endif %}
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="badge badge-blue">{{ program.category.name }}</span>
+            <span class="badge badge-gray">{{ program.get_difficulty_level_display }}</span>
+          </div>
+          <h3>{{ program.title }}</h3>
+          <p>{{ program.description|truncatewords:16 }}</p>
+          <a href="{{ program.get_absolute_url }}" class="btn btn-outline-dark btn-sm">View Details</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% include "partials/pagination.html" %}
+
+    {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-graduation-cap" style="font-size:2rem; margin-bottom:12px;"></i>
+      <p>No programs found for this filter yet — check back soon or try another category.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

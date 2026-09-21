@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}About Us — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>About FutureForge Labs</h1>
+    <p>Practical STEAM, robotics, electronics and AI education for the next generation of builders.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:center;">
+    <div>
+      <span class="eyebrow">Who We Are</span>
+      <h2>A STEAM Education & Innovation Organization</h2>
+      <p>FutureForge Labs is a STEAM education and technology training organization that delivers practical, hands-on learning in robotics, programming, artificial intelligence, electronics, IoT and embedded systems. We work with primary and secondary schools, universities, colleges, teachers, companies, NGOs, government organizations and community groups.</p>
+      <p>Our approach is simple: learners don't just study technology — they build it. Every program ends with a real, working project.</p>
+    </div>
+    <div>
+      <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80" alt="Trainer guiding students through an electronics project" style="border-radius:var(--radius); box-shadow:var(--shadow-md);">
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--gray-100);">
+  <div class="container grid grid-3">
+    <div class="card icon-card">
+      <div class="icon-wrap"><i class="fa-solid fa-bullseye"></i></div>
+      <h3>Our Mission</h3>
+      <p>To equip learners of all ages with practical, real-world skills in robotics, programming, electronics and emerging technologies through hands-on training.</p>
+    </div>
+    <div class="card icon-card">
+      <div class="icon-wrap"><i class="fa-solid fa-eye"></i></div>
+      <h3>Our Vision</h3>
+      <p>A generation of confident innovators who can design, build and deploy technology that solves real problems in their communities.</p>
+    </div>
+    <div class="card icon-card">
+      <div class="icon-wrap"><i class="fa-solid fa-gem"></i></div>
+      <h3>Our Values</h3>
+      <p>Practical learning, curiosity, integrity, collaboration and a relentless focus on building — not just theorizing.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:center;">
+    <div>
+      <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80" alt="Students testing a robotics prototype" style="border-radius:var(--radius); box-shadow:var(--shadow-md);">
+    </div>
+    <div>
+      <span class="eyebrow">What Makes Us Different</span>
+      <h2>Our Approach</h2>
+      <p>We don't teach technology in the abstract. Every session is built around real hardware — Arduino, ESP32, Raspberry Pi, sensors and motors — so learners see immediate, tangible results.</p>
+      <p>We partner directly with institutions to design curricula that fit real classroom time, real budgets and real learner needs.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--navy);">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow" style="background:rgba(0,217,255,0.12); color:var(--cyan);">How We Teach</span>
+      <h2 style="color:white;">Our 7-Step Learning Process</h2>
+    </div>
+    <div class="process-steps" style="max-width:760px; margin:0 auto;">
+      {% for step in how_we_teach %}
+      <div class="process-step">
+        <div class="step-num">{{ step.step }}</div>
+        <div>
+          <h3 style="margin-bottom:4px;">{{ step.title }}</h3>
+          <p style="margin:0;">{{ step.text }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

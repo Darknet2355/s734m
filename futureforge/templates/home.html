@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ SITE_NAME }} — Building the Next Generation of Innovators{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">STEAM · Robotics · AI · Electronics · Innovation</span>
+      <h1>Building the Next Generation of <span>Innovators</span></h1>
+      <p class="lead">We equip students, educators, institutions and organizations with practical skills in robotics, programming, electronics, artificial intelligence and emerging technologies.</p>
+      <div class="hero-actions">
+        <a href="{% url 'programs:program_list' %}" class="btn btn-primary">Explore Our Programs</a>
+        <a href="{% url 'inquiries:training_request' %}" class="btn btn-outline">Request Training</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80" alt="Students building a robotics project">
+      <div class="circuit-deco"></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div class="container stats-grid">
+    <div class="stat-item">
+      <div class="stat-number" data-counter="{{ stats.students_trained }}">0</div>
+      <div class="stat-label">Students Trained</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-counter="{{ stats.institutions_reached }}">0</div>
+      <div class="stat-label">Institutions Reached</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-counter="{{ stats.projects_built }}">0</div>
+      <div class="stat-label">Projects Built</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-counter="{{ stats.training_programs }}">0</div>
+      <div class="stat-label">Training Programs</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">What We Teach</span>
+      <h2>Empowering Innovation Through Practical Learning</h2>
+      <p>Real hardware. Real code. Real projects — learners build things that work.</p>
+    </div>
+    <div class="grid grid-3">
+      {% for area in focus_areas %}
+      <div class="card icon-card">
+        <div class="icon-wrap"><i class="{{ area.icon }}"></i></div>
+        <h3>{{ area.title }}</h3>
+        <p>{{ area.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if featured_programs %}
+<section class="section" style="background:var(--gray-100);">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Featured Programs</span>
+      <h2>Training Built For Every Learner</h2>
+    </div>
+    <div class="grid grid-3">
+      {% for program in featured_programs %}
+      <div class="card">
+        <div class="card-img">
+          {% if program.image %}<img src="{{ program.image.url }}" alt="{{ program.title }}">
+          {% else %}<img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80" alt="{{ program.title }}">{% endif %}
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="badge badge-blue">{{ program.category.name }}</span>
+            <span class="badge badge-gray">{{ program.get_difficulty_level_display }}</span>
+          </div>
+          <h3>{{ program.title }}</h3>
+          <p>{{ program.description|truncatewords:16 }}</p>
+          <a href="{{ program.get_absolute_url }}" class="btn btn-outline-dark btn-sm">View Program</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4"><a href="{% url 'programs:program_list' %}" class="btn btn-primary">See All Programs</a></div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Why FutureForge Labs?</span>
+      <h2>A Serious Partner For Practical Technology Education</h2>
+    </div>
+    <div class="grid grid-3">
+      {% for item in why_futureforge %}
+      <div class="card icon-card" style="background:var(--dark-blue); border:1px solid rgba(255,255,255,0.08);">
+        <div class="icon-wrap"><i class="{{ item.icon }}"></i></div>
+        <h3 style="color:var(--white);">{{ item.title }}</h3>
+        <p style="color:var(--gray-300);">{{ item.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if featured_projects %}
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Innovation In Action</span>
+      <h2>Real Projects Built By Real Learners</h2>
+    </div>
+    <div class="grid grid-3">
+      {% for project in featured_projects %}
+      <div class="card">
+        <div class="card-img"><img src="{{ project.featured_image.url }}" alt="{{ project.title }}"></div>
+        <div class="card-body">
+          <span class="badge badge-cyan">{{ project.get_category_display }}</span>
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description|truncatewords:16 }}</p>
+          <a href="{{ project.get_absolute_url }}" class="btn btn-outline-dark btn-sm">View Project</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section" style="background:linear-gradient(135deg,var(--electric-blue),var(--dark-blue)); color:white; text-align:center;">
+  <div class="container">
+    <h2 style="color:white;">Ready to Bring Practical Technology Training to Your Institution?</h2>
+    <p style="color:var(--gray-100); max-width:600px; margin:0 auto 28px;">Whether you're a school, university, company or NGO — we design hands-on programs for your learners.</p>
+    <a href="{% url 'inquiries:training_request' %}" class="btn btn-accent">Request Training Today</a>
+  </div>
+</section>
+{% endblock %}

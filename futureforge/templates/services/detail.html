@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ service.title }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'services:service_list' %}">Services</a> / {{ service.title }}</div>
+    <h1>{{ service.title }}</h1>
+  </div>
+</section>
+
+{% if service.image %}
+<div class="container" style="margin-top:-1px;">
+  <img src="{{ service.image.url }}" alt="{{ service.title }}" style="width:100%; max-height:320px; object-fit:cover; border-radius:var(--radius); margin-top:24px; box-shadow:var(--shadow-md);">
+</div>
+{% endif %}
+
+<section class="section">
+  <div class="container grid grid-2" style="align-items:flex-start; gap:40px;">
+    <div>
+      <h2>Overview</h2>
+      <p>{{ service.description|linebreaks }}</p>
+      <h2>Who This Is For</h2>
+      <div class="card-meta">
+        {% for c in service.target_clients_list %}<span class="badge badge-blue">{{ c }}</span>{% endfor %}
+      </div>
+      <h2 class="mt-4">Benefits</h2>
+      <ul>{% for b in service.benefits_list %}<li>{{ b }}</li>{% endfor %}</ul>
+    </div>
+    <div>
+      <div class="card" style="padding:26px;">
+        <h3>Interested In This Service?</h3>
+        <p>Submit a training request and our team will reach out with a proposal.</p>
+        <a href="{% url 'inquiries:training_request' %}?service={{ service.slug }}" class="btn btn-primary btn-block">Request This Service</a>
+      </div>
+
+      {% if other_services %}
+      <div class="card" style="padding:26px; margin-top:20px;">
+        <h3>Other Services</h3>
+        {% for s in other_services %}<p><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></p>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

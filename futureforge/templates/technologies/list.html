@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Technologies — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Technologies We Teach</h1>
+    <p>From Arduino to AI development boards — the hardware and tools our learners work with.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="filter-bar">
+      <a href="{% url 'technologies:technology_list' %}" class="{% if not active_category %}active{% endif %}">All Categories</a>
+      {% for cat in categories %}
+        <a href="?category={{ cat.slug }}" class="{% if active_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+    <div class="filter-bar">
+      <a href="?{% if active_category %}category={{ active_category }}&{% endif %}" class="{% if not active_level %}active{% endif %}">All Levels</a>
+      {% for value, label in difficulty_choices %}
+        <a href="?{% if active_category %}category={{ active_category }}&{% endif %}level={{ value }}" class="{% if active_level == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    {% if page_obj %}
+    <div class="grid grid-4">
+      {% for tech in page_obj %}
+      <div class="card">
+        <div class="card-img">
+          {% if tech.image %}<img src="{{ tech.image.url }}" alt="{{ tech.name }}">
+          {% else %}<img src="https://images.unsplash.com/photo-1553406830-ef2513450d76?w=500&q=80" alt="{{ tech.name }}">{% endif %}
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="badge badge-blue">{{ tech.category.name }}</span>
+            <span class="badge badge-gray">{{ tech.get_difficulty_display }}</span>
+          </div>
+          <h3>{{ tech.name }}</h3>
+          <p>{{ tech.description|truncatewords:14 }}</p>
+          <a href="{{ tech.get_absolute_url }}" class="btn btn-outline-dark btn-sm">Learn More</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-microchip" style="font-size:2rem; margin-bottom:12px;"></i>
+      <p>No technologies found for this filter yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

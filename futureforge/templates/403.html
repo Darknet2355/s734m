@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Denied — FutureForge Labs</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<section style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--navy); color:white; text-align:center; padding:20px;">
+  <div>
+    <div style="font-size:5rem; font-weight:800; color:var(--orange);"><i class="fa-solid fa-lock"></i></div>
+    <h1 style="color:white;">403 — Access Denied</h1>
+    <p style="color:var(--gray-300); max-width:420px; margin:0 auto 26px;">You don't have permission to access this page.</p>
+    <a href="/" class="btn btn-primary">Back to Home</a>
+  </div>
+</section>
+</body>
+</html>

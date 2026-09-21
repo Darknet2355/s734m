@@ -1,0 +1,29 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+/venv/
+
+# Secret/Environment Variables (Hides your Postgres password)
+.env
+
+/staticfiles/
+/media/*
+!/media/.gitkeep
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# OS specific files
+.DS_Store
+Thumbs.db
