@@ -16,6 +16,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  /* ---------- "More" nav dropdown ---------- */
+  document.querySelectorAll('.nav-dropdown-toggle').forEach(function (toggle) {
+    const dropdown = toggle.closest('.nav-dropdown');
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const willOpen = !dropdown.classList.contains('open');
+      document.querySelectorAll('.nav-dropdown.open').forEach(function (d) {
+        d.classList.remove('open');
+        d.querySelector('.nav-dropdown-toggle').setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        dropdown.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('.nav-dropdown.open').forEach(function (dropdown) {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+        dropdown.querySelector('.nav-dropdown-toggle').setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
   /* ---------- Animated stat counters ---------- */
   const counters = document.querySelectorAll('[data-counter]');
   if (counters.length) {
