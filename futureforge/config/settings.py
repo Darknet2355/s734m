@@ -3,6 +3,7 @@ Django settings for FutureForge Labs project.
 """
 from pathlib import Path
 from decouple import config, Csv
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,16 +85,26 @@ ASGI_APPLICATION = 'config.asgi.application'
 # ---------------------------------------------------------------------------
 # Database — PostgreSQL only
 # ---------------------------------------------------------------------------
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='futureforge_db'),
-        'USER': config('DB_USER', default='futureforge_user'),
-        'PASSWORD': config('DB_PASSWORD', default='postgres'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+# If DATABASE_URL is set (e.g. by Render, Railway, Heroku), use it directly.
+# Otherwise fall back to the discrete DB_* variables for local development.
+DATABASE_URL = config('DATABASE_URL', default='')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL, conn_max_age=600, ssl_require=not DEBUG,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='futureforge_db'),
+            'USER': config('DB_USER', default='futureforge'),
+            'PASSWORD': config('DB_PASSWORD', default='postgres'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
 
 # ---------------------------------------------------------------------------
 # Custom user model (used for admin/dashboard authentication)
@@ -141,6 +152,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = False  # must stay readable by JS fetch calls if used
 X_FRAME_OPTIONS = 'DENY'
+
+# Render (and most PaaS hosts) terminate HTTPS at a proxy and forward plain
+# HTTP to the app, so Django needs this header to correctly detect HTTPS.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Required for POST forms (login, contact, training request) to pass CSRF
+# checks when served over HTTPS through a proxy. Set to your real domain(s),
+# comma-separated, e.g. "https://futureforge-labs.onrender.com".
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=Csv())
 
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
